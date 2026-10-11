@@ -1,0 +1,6 @@
+{
+  "name": "HEEMS | Luxury Men's Fashion (Shirts & Panjabi)",
+  "description": "Official store for HEEMS: Premium handcrafted Men's Shirts & Panjabis with manual bKash/Nagad advance payment verification, live order tracking, and comprehensive admin dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
