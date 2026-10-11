@@ -1,5 +1,6 @@
 import React from 'react';
 import { Award, Scissors, ShieldCheck, Heart, Sparkles, ArrowRight } from 'lucide-react';
+import { resolveAsset } from '../utils/resolveAsset';
 
 interface AboutPageProps {
   navigate: (route: string, params?: any) => void;
@@ -12,7 +13,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ navigate }) => {
       <section className="relative min-h-[60vh] flex items-center justify-center border-b border-white/[0.08] overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src="/src/assets/images/hero_luxury_menswear_1791384214280.jpg"
+            src={resolveAsset('/assets/images/hero_luxury_menswear_1791384214280.jpg')}
             alt="Rich People Atelier"
             className="w-full h-full object-cover filter brightness-50"
           />
@@ -51,7 +52,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ navigate }) => {
 
         <div className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/3]">
           <img
-            src="/src/assets/images/craftsmanship_fabric_banner_1791384259700.jpg"
+            src={resolveAsset('/assets/images/craftsmanship_fabric_banner_1791384259700.jpg')}
             alt="Artisanal tailoring"
             className="w-full h-full object-cover"
           />

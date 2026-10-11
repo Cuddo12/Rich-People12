@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Rich People | Luxury Menswear</title>
+    <script>
+      // Single Page App redirect for GitHub Pages
+      // Redirects 404 path back to index.html using hash routing
+      var path = window.location.pathname;
+      var repo = path.split('/')[1] || '';
+      var subpath = path.split('/').slice(2).join('/');
+      var target = window.location.origin + '/' + repo + '/#/' + subpath + window.location.search;
+      window.location.replace(target);
+    </script>
+  </head>
+  <body style="background:#09090b;color:#fff;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+    <p style="font-size:14px;letter-spacing:0.1em;text-transform:uppercase;">Redirecting to Rich People Storefront...</p>
+  </body>
+</html>

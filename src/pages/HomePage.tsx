@@ -5,6 +5,7 @@ import { ProductCard } from '../components/product/ProductCard';
 import { QuickViewModal } from '../components/product/QuickViewModal';
 import { RichPeopleClubModal } from '../components/vip/RichPeopleClubModal';
 import { useToast } from '../context/ToastContext';
+import { resolveAsset } from '../utils/resolveAsset';
 
 interface HomePageProps {
   navigate: (route: string, params?: any) => void;
@@ -64,7 +65,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
         {/* Background Image with Cinematic Scrim */}
         <div className="absolute inset-0 z-0">
           <img
-            src="/src/assets/images/hero_luxury_menswear_1791384214280.jpg"
+            src={resolveAsset('/assets/images/hero_luxury_menswear_1791384214280.jpg')}
             alt="Rich People Luxury Menswear"
             className="w-full h-full object-cover object-center filter brightness-[0.65] contrast-[1.1]"
           />
@@ -159,7 +160,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
               className="group relative h-96 rounded-xl overflow-hidden cursor-pointer border border-white/10 hover:border-white/30 transition-all duration-300"
             >
               <img
-                src={cat.image}
+                src={resolveAsset(cat.image)}
                 alt={cat.name}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 referrerPolicy="no-referrer"
@@ -252,7 +253,7 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
 
           <div className="relative aspect-[16/10] rounded-2xl overflow-hidden border border-white/10 shadow-2xl">
             <img
-              src="/src/assets/images/craftsmanship_fabric_banner_1791384259700.jpg"
+              src={resolveAsset('/assets/images/craftsmanship_fabric_banner_1791384259700.jpg')}
               alt="Rich People Fabric Craftsmanship"
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"

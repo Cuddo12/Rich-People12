@@ -98,12 +98,6 @@ export const AdminLogin: React.FC<AdminLoginProps> = ({ navigate }) => {
             </div>
           </div>
 
-          <div className="p-3 rounded bg-zinc-950 border border-white/5 text-[11px] text-zinc-400 space-y-1">
-            <span className="font-semibold text-zinc-300 block">Default Seed Credentials:</span>
-            <p>Username: <code className="text-amber-300 font-mono">.....</code></p>
-            <p>Password: <code className="text-amber-300 font-mono">.....1</code></p>
-          </div>
-
           <button
             type="submit"
             disabled={loading}

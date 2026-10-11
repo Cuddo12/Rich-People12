@@ -3,6 +3,7 @@ import { Layers, Plus, Trash2, Edit2, X, RefreshCw } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { CategoryItem, CollectionItem } from '../../types/ecommerce';
+import { resolveAsset } from '../../utils/resolveAsset';
 
 export const AdminCategories: React.FC = () => {
   const { token } = useAdminAuth();
@@ -179,7 +180,7 @@ export const AdminCategories: React.FC = () => {
             {categories.map((c) => (
               <div key={c.id} className="p-3.5 rounded-xl bg-zinc-950/60 border border-white/5 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
-                  <img src={c.image} alt="" className="w-10 h-10 object-cover rounded" />
+                  <img src={resolveAsset(c.image)} alt="" className="w-10 h-10 object-cover rounded" />
                   <div>
                     <strong className="text-white block text-sm">{c.name}</strong>
                     <span className="text-[11px] text-zinc-500 font-mono">/{c.slug}</span>
@@ -216,7 +217,7 @@ export const AdminCategories: React.FC = () => {
             {collections.map((col) => (
               <div key={col.id} className="p-3.5 rounded-xl bg-zinc-950/60 border border-white/5 flex items-center justify-between text-xs">
                 <div className="flex items-center gap-3">
-                  <img src={col.image} alt="" className="w-10 h-10 object-cover rounded" />
+                  <img src={resolveAsset(col.image)} alt="" className="w-10 h-10 object-cover rounded" />
                   <div>
                     <strong className="text-white block text-sm">{col.name}</strong>
                     <span className="text-[11px] text-zinc-500">{col.description}</span>

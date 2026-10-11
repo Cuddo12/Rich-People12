@@ -15,6 +15,7 @@ import {
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Product, ProductSize, CategoryItem } from '../../types/ecommerce';
+import { resolveAsset } from '../../utils/resolveAsset';
 
 export const AdminProducts: React.FC = () => {
   const { token } = useAdminAuth();
@@ -336,7 +337,7 @@ export const AdminProducts: React.FC = () => {
                     <td className="p-3">
                       <div className="flex items-center gap-3">
                         <img
-                          src={p.featuredImage || p.images[0]}
+                          src={resolveAsset(p.featuredImage || p.images[0])}
                           alt=""
                           className="w-12 h-14 object-cover rounded bg-zinc-950 shrink-0 border border-white/5"
                         />

@@ -4,6 +4,7 @@ import { Product, ProductSize } from '../../types/ecommerce';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useToast } from '../../context/ToastContext';
+import { resolveAsset } from '../../utils/resolveAsset';
 
 interface QuickViewModalProps {
   product: Product | null;
@@ -67,7 +68,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
         <div className="p-6 bg-zinc-950/60 flex flex-col justify-between">
           <div className="aspect-[3/4] w-full rounded-lg overflow-hidden bg-zinc-900 border border-white/5 relative">
             <img
-              src={selectedImage}
+              src={resolveAsset(selectedImage)}
               alt={product.name}
               className="w-full h-full object-cover"
               referrerPolicy="no-referrer"
@@ -92,7 +93,7 @@ export const QuickViewModal: React.FC<QuickViewModalProps> = ({
                       : 'border-white/10 opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={resolveAsset(img)} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </button>
               ))}
             </div>

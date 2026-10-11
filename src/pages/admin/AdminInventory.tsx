@@ -3,6 +3,7 @@ import { Boxes, AlertTriangle, History, Plus, Minus, Search, ArrowUpRight, Arrow
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Product, InventoryLog } from '../../types/ecommerce';
+import { resolveAsset } from '../../utils/resolveAsset';
 
 export const AdminInventory: React.FC = () => {
   const { token } = useAdminAuth();
@@ -124,7 +125,7 @@ export const AdminInventory: React.FC = () => {
               return (
                 <div key={p.id} className="py-3 flex items-center justify-between text-xs">
                   <div className="flex items-center gap-3">
-                    <img src={p.featuredImage || p.images[0]} alt="" className="w-10 h-12 object-cover rounded bg-zinc-950" />
+                    <img src={resolveAsset(p.featuredImage || p.images[0])} alt="" className="w-10 h-12 object-cover rounded bg-zinc-950" />
                     <div>
                       <strong className="text-white block line-clamp-1">{p.name}</strong>
                       <span className="text-[10px] text-zinc-400 font-mono">SKU: {p.sku}</span>

@@ -36,12 +36,33 @@ import { AdminReports } from './pages/admin/AdminReports';
 import { AdminProfile } from './pages/admin/AdminProfile';
 
 function AppContent() {
-  const [currentRoute, setCurrentRoute] = useState<string>('/');
+  // Read initial route from hash if present (e.g. #/shop or #/admin)
+  const getInitialRoute = () => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const cleanHash = window.location.hash.replace(/^#/, '');
+      if (cleanHash.startsWith('/')) return cleanHash;
+    }
+    return '/';
+  };
+
+  const [currentRoute, setCurrentRoute] = useState<string>(getInitialRoute);
   const [routeParams, setRouteParams] = useState<any>({});
   const [adminTab, setAdminTab] = useState<AdminTab>('dashboard');
   const [siteSettings, setSiteSettings] = useState<any>(null);
 
   const { isAuthenticated, isLoading: authLoading } = useAdminAuth();
+
+  // Sync route on hashchange (supports browser Back/Forward & direct links)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace(/^#/, '');
+      if (hash && hash.startsWith('/')) {
+        setCurrentRoute(hash);
+      }
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // Load site settings once
   useEffect(() => {
@@ -51,10 +72,15 @@ function AppContent() {
       .catch((err) => console.error(err));
   }, []);
 
-  // Simple, robust client router
+  // Simple, robust client router with hash sync for static hosts like GitHub Pages
   const navigate = (route: string, params: any = {}) => {
     setCurrentRoute(route);
     setRouteParams(params);
+    if (typeof window !== 'undefined') {
+      if (window.location.hash !== `#${route}`) {
+        window.location.hash = route;
+      }
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 

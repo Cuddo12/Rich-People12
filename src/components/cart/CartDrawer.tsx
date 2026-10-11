@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { X, Trash2, ArrowRight, ShieldCheck, Tag, ShoppingBag } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useToast } from '../../context/ToastContext';
+import { resolveAsset } from '../../utils/resolveAsset';
 
 interface CartDrawerProps {
   navigate: (route: string, params?: any) => void;
@@ -123,7 +124,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({ navigate }) => {
                   className="flex gap-4 p-3 rounded-lg bg-zinc-900/40 border border-white/[0.06] hover:border-white/10 transition-colors"
                 >
                   <img
-                    src={item.image}
+                    src={resolveAsset(item.image)}
                     alt={item.name}
                     className="w-20 h-24 object-cover rounded bg-zinc-950 shrink-0"
                     referrerPolicy="no-referrer"

@@ -2,12 +2,12 @@ import { Product, CategoryItem, CollectionItem, Coupon, Offer, Order, SiteSettin
 
 export const initialAdmin: AdminUser & { passwordHash: string } = {
   id: 'admin_miljar_01',
-  username: process.env.ADMIN_USERNAME || 'Miljar',
+  username: (typeof process !== 'undefined' && process.env?.ADMIN_USERNAME) || '1234',
   email: 'miljar@richpeople.fashion',
   role: 'super_admin',
   createdAt: '2026-01-01T00:00:00Z',
   // In a lightweight setup we store bcrypt or salt-hash; for seamless portability we store secure hash
-  passwordHash: 'Miljar12', // default initial password, can be changed via admin dashboard
+  passwordHash: (typeof process !== 'undefined' && process.env?.ADMIN_PASSWORD) || '224455', // initial password, can be changed via admin dashboard
 };
 
 export const initialSiteSettings: SiteSettings = {

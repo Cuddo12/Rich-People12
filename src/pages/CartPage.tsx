@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ShoppingBag, Trash2, ArrowRight, ShieldCheck, Tag, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
+import { resolveAsset } from '../utils/resolveAsset';
 
 interface CartPageProps {
   navigate: (route: string, params?: any) => void;
@@ -92,7 +93,7 @@ export const CartPage: React.FC<CartPageProps> = ({ navigate }) => {
             >
               <div className="flex gap-4 items-center">
                 <img
-                  src={item.image}
+                  src={resolveAsset(item.image)}
                   alt={item.name}
                   className="w-20 h-24 object-cover rounded-lg bg-zinc-950 shrink-0 border border-white/5"
                   referrerPolicy="no-referrer"

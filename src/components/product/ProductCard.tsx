@@ -4,6 +4,7 @@ import { Product, ProductSize } from '../../types/ecommerce';
 import { useCart } from '../../context/CartContext';
 import { useWishlist } from '../../context/WishlistContext';
 import { useToast } from '../../context/ToastContext';
+import { resolveAsset } from '../../utils/resolveAsset';
 
 interface ProductCardProps {
   product: Product;
@@ -57,7 +58,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       {/* Product Image Area */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-zinc-950">
         <img
-          src={product.featuredImage || product.images[0]}
+          src={resolveAsset(product.featuredImage || product.images[0])}
           alt={product.name}
           className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
           referrerPolicy="no-referrer"

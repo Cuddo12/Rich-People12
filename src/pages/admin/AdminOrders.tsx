@@ -19,6 +19,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Order, OrderStatus, PaymentStatus } from '../../types/ecommerce';
 import { PrintableInvoice } from '../../components/invoice/PrintableInvoice';
+import { resolveAsset } from '../../utils/resolveAsset';
 
 export const AdminOrders: React.FC = () => {
   const { token } = useAdminAuth();
@@ -467,7 +468,7 @@ export const AdminOrders: React.FC = () => {
                 {selectedOrder.items.map((item, i) => (
                   <div key={i} className="p-3 flex items-center justify-between text-xs">
                     <div className="flex items-center gap-3">
-                      <img src={item.image} alt="" className="w-10 h-12 object-cover rounded bg-zinc-900" />
+                      <img src={resolveAsset(item.image)} alt="" className="w-10 h-12 object-cover rounded bg-zinc-900" />
                       <div>
                         <strong className="text-white block">{item.name}</strong>
                         <span className="text-zinc-400">

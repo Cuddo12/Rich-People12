@@ -20,6 +20,7 @@ import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
 import { ProductCard } from '../components/product/ProductCard';
+import { resolveAsset } from '../utils/resolveAsset';
 
 interface ProductDetailsPageProps {
   slugOrId: string;
@@ -178,7 +179,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
         <div className="lg:col-span-7 space-y-4">
           <div className="aspect-[3/4] w-full rounded-2xl overflow-hidden bg-zinc-950 border border-white/10 relative shadow-2xl">
             <img
-              src={activeImage}
+              src={resolveAsset(activeImage)}
               alt={product.name}
               className="w-full h-full object-cover object-center"
               referrerPolicy="no-referrer"
@@ -203,7 +204,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
                       : 'border-white/10 opacity-70 hover:opacity-100'
                   }`}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                  <img src={resolveAsset(img)} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
                 </button>
               ))}
             </div>

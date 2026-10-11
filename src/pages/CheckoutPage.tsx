@@ -13,6 +13,7 @@ import {
 import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { SiteSettings } from '../types/ecommerce';
+import { formatBdPhoneNumber, isValidBdPhoneNumber } from '../utils/phoneMask';
 
 interface CheckoutPageProps {
   navigate: (route: string, params?: any) => void;
@@ -118,8 +119,18 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ navigate }) => {
       return;
     }
 
+    if (!isValidBdPhoneNumber(customerPhone)) {
+      error('Recipient mobile must strictly follow the BD 11-digit mobile format (01xxxxxxxxx).');
+      return;
+    }
+
     if (!transactionId.trim() || !senderPhone.trim()) {
       error('Please input your payment Transaction ID and Sender Mobile Number.');
+      return;
+    }
+
+    if (!isValidBdPhoneNumber(senderPhone)) {
+      error('Sender mobile must strictly follow the BD 11-digit mobile format (01xxxxxxxxx).');
       return;
     }
 
@@ -238,14 +249,15 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ navigate }) => {
 
               <div>
                 <label className="block text-zinc-300 font-semibold mb-1">
-                  Mobile Contact Number *
+                  Mobile Contact Number (BD 11-digit) *
                 </label>
                 <input
                   type="tel"
                   value={customerPhone}
-                  onChange={(e) => setCustomerPhone(e.target.value)}
-                  placeholder="e.g. 01711223344"
-                  className="w-full px-3.5 py-2.5 rounded bg-zinc-950 border border-white/15 text-white focus:outline-none focus:border-white/40"
+                  onChange={(e) => setCustomerPhone(formatBdPhoneNumber(e.target.value))}
+                  placeholder="01xxxxxxxxx"
+                  maxLength={11}
+                  className="w-full px-3.5 py-2.5 rounded bg-zinc-950 border border-white/15 text-white font-mono tracking-wider focus:outline-none focus:border-white/40"
                   required
                 />
               </div>
@@ -477,18 +489,19 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ navigate }) => {
 
               <div>
                 <label className="block text-zinc-300 font-semibold mb-1">
-                  Sender Mobile Number *
+                  Sender Mobile Number (BD 11-digit) *
                 </label>
                 <input
                   type="tel"
                   value={senderPhone}
-                  onChange={(e) => setSenderPhone(e.target.value)}
-                  placeholder="e.g. 017XXXXXXXX"
-                  className="w-full px-3.5 py-2.5 rounded bg-zinc-950 border border-white/15 text-white font-mono focus:outline-none focus:border-white/40"
+                  onChange={(e) => setSenderPhone(formatBdPhoneNumber(e.target.value))}
+                  placeholder="01xxxxxxxxx"
+                  maxLength={11}
+                  className="w-full px-3.5 py-2.5 rounded bg-zinc-950 border border-white/15 text-white font-mono tracking-wider focus:outline-none focus:border-white/40"
                   required
                 />
                 <span className="text-[10px] text-zinc-500 mt-1 block">
-                  The account number you sent money from
+                  The 11-digit bKash/Nagad account you sent money from
                 </span>
               </div>
 
