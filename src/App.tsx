@@ -34,6 +34,7 @@ import { AdminMessages } from './pages/admin/AdminMessages';
 import { AdminSettings } from './pages/admin/AdminSettings';
 import { AdminReports } from './pages/admin/AdminReports';
 import { AdminProfile } from './pages/admin/AdminProfile';
+import { apiFetch } from './services/api';
 
 function AppContent() {
   // Read initial route from hash if present (e.g. #/shop or #/admin)
@@ -66,7 +67,7 @@ function AppContent() {
 
   // Load site settings once
   useEffect(() => {
-    fetch('/api/settings')
+    apiFetch('/api/settings')
       .then((res) => res.json())
       .then((data) => setSiteSettings(data))
       .catch((err) => console.error(err));

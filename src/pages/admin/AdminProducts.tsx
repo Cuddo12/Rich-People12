@@ -16,6 +16,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Product, ProductSize, CategoryItem } from '../../types/ecommerce';
 import { resolveAsset } from '../../utils/resolveAsset';
+import { apiFetch } from '../../services/api';
 
 export const AdminProducts: React.FC = () => {
   const { token } = useAdminAuth();
@@ -67,8 +68,8 @@ export const AdminProducts: React.FC = () => {
       q.set('limit', '100');
 
       const [pRes, cRes] = await Promise.all([
-        fetch(`/api/products?${q.toString()}`),
-        fetch('/api/categories'),
+        apiFetch(`/api/products?${q.toString()}`),
+        apiFetch('/api/categories'),
       ]);
 
       if (pRes.ok) {
@@ -193,7 +194,7 @@ export const AdminProducts: React.FC = () => {
       const url = editingProduct ? `/api/products/${editingProduct.id}` : '/api/products';
       const method = editingProduct ? 'PUT' : 'POST';
 
-      const res = await fetch(url, {
+      const res = await apiFetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
@@ -219,7 +220,7 @@ export const AdminProducts: React.FC = () => {
   const handleDeleteProduct = async (id: string, prodName: string) => {
     if (!window.confirm(`Are you certain you want to permanently delete "${prodName}"?`)) return;
     try {
-      const res = await fetch(`/api/products/${id}`, {
+      const res = await apiFetch(`/api/products/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -234,7 +235,7 @@ export const AdminProducts: React.FC = () => {
 
   const handleDuplicateProduct = async (id: string) => {
     try {
-      const res = await fetch(`/api/products/${id}/duplicate`, {
+      const res = await apiFetch(`/api/products/${id}/duplicate`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });

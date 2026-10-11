@@ -14,6 +14,7 @@ import { useCart } from '../context/CartContext';
 import { useToast } from '../context/ToastContext';
 import { SiteSettings } from '../types/ecommerce';
 import { formatBdPhoneNumber, isValidBdPhoneNumber } from '../utils/phoneMask';
+import { apiFetch } from '../services/api';
 
 interface CheckoutPageProps {
   navigate: (route: string, params?: any) => void;
@@ -47,7 +48,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ navigate }) => {
   const [screenshotPreview, setScreenshotPreview] = useState<string>('');
 
   useEffect(() => {
-    fetch('/api/settings')
+    apiFetch('/api/settings')
       .then((res) => res.json())
       .then((data) => setSettings(data))
       .catch((err) => console.error(err));
@@ -166,18 +167,19 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({ navigate }) => {
         paymentScreenshot: screenshotPreview || undefined,
       };
 
-      const res = await fetch('/api/orders', {
+      const res = await apiFetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderPayload),
       });
 
       const data = await res.json();
+      const placedOrder = data.order || data;
 
-      if (res.ok && data.success && data.order) {
+      if (res.ok && placedOrder && placedOrder.id) {
         clearCart();
-        success(`Order #${data.order.id} placed successfully!`);
-        navigate(`/order-success/${data.order.id}`, { order: data.order });
+        success(`Order #${placedOrder.id} placed successfully!`);
+        navigate(`/order-success/${placedOrder.id}`, { order: placedOrder });
       } else {
         error(data.error || 'Failed to submit order. Please check inputs.');
       }

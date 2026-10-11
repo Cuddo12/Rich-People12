@@ -464,42 +464,87 @@ export async function handleStaticApi(url: string, init?: RequestInit): Promise<
 }
 
 /**
- * Installs transparent client-side fallback into window.fetch
+ * Safe fetch wrapper that handles static hosting (e.g. GitHub Pages) fallback
+ */
+export async function apiFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
+  const urlString = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+
+  if (urlString.includes('/api/')) {
+    try {
+      const response = await window.fetch(input, init);
+      const contentType = response.headers.get('content-type') || '';
+      if (response.ok && contentType.includes('application/json')) {
+        return response;
+      }
+      if (response.status === 404 || contentType.includes('text/html') || response.status >= 500) {
+        const fallback = await handleStaticApi(urlString, init);
+        if (fallback) return fallback;
+      }
+      return response;
+    } catch (networkErr) {
+      const fallback = await handleStaticApi(urlString, init);
+      if (fallback) return fallback;
+      throw networkErr;
+    }
+  }
+
+  return window.fetch(input, init);
+}
+
+/**
+ * Installs transparent client-side fallback into window.fetch when supported
  */
 export function initStaticApiFallback() {
   if (typeof window === 'undefined') return;
 
-  const originalFetch = window.fetch.bind(window);
-
-  window.fetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
-    const urlString = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
-
-    // Only process /api/ calls
-    if (urlString.includes('/api/')) {
-      try {
-        const response = await originalFetch(input, init);
-
-        // If the server answered with JSON or ok status, use it
-        const contentType = response.headers.get('content-type') || '';
-        if (response.ok && contentType.includes('application/json')) {
-          return response;
-        }
-
-        // If 404 or returned HTML (like GitHub Pages returns for non-existent API routes)
-        if (response.status === 404 || contentType.includes('text/html') || response.status >= 500) {
-          const fallback = await handleStaticApi(urlString, init);
-          if (fallback) return fallback;
-        }
-
-        return response;
-      } catch (networkErr) {
-        // Failed network request (static hosting without server)
-        const fallback = await handleStaticApi(urlString, init);
-        if (fallback) return fallback;
-        throw networkErr;
-      }
+  try {
+    // Check if window.fetch can be modified safely
+    const desc = Object.getOwnPropertyDescriptor(window, 'fetch');
+    if (desc && !desc.writable && !desc.set && !desc.configurable) {
+      return;
     }
 
-    return originalFetch(input, init);
-  };
+    const originalFetch = window.fetch.bind(window);
+
+    const patchedFetch = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
+      const urlString = typeof input === 'string' ? input : input instanceof URL ? input.toString() : input.url;
+
+      if (urlString.includes('/api/')) {
+        try {
+          const response = await originalFetch(input, init);
+          const contentType = response.headers.get('content-type') || '';
+          if (response.ok && contentType.includes('application/json')) {
+            return response;
+          }
+          if (response.status === 404 || contentType.includes('text/html') || response.status >= 500) {
+            const fallback = await handleStaticApi(urlString, init);
+            if (fallback) return fallback;
+          }
+          return response;
+        } catch (networkErr) {
+          const fallback = await handleStaticApi(urlString, init);
+          if (fallback) return fallback;
+          throw networkErr;
+        }
+      }
+
+      return originalFetch(input, init);
+    };
+
+    try {
+      window.fetch = patchedFetch;
+    } catch {
+      try {
+        Object.defineProperty(window, 'fetch', {
+          value: patchedFetch,
+          writable: true,
+          configurable: true,
+        });
+      } catch {
+        // Window.fetch has only a getter in this environment
+      }
+    }
+  } catch {
+    // Fallback gracefully without throwing
+  }
 }

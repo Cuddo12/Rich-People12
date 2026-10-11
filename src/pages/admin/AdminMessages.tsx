@@ -3,6 +3,7 @@ import { Mail, Check, RefreshCw } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { ContactMessage } from '../../types/ecommerce';
+import { apiFetch } from '../../services/api';
 
 export const AdminMessages: React.FC = () => {
   const { token } = useAdminAuth();
@@ -14,7 +15,7 @@ export const AdminMessages: React.FC = () => {
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/contact', {
+      const res = await apiFetch('/api/contact', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -33,7 +34,7 @@ export const AdminMessages: React.FC = () => {
 
   const markRead = async (id: string) => {
     try {
-      const res = await fetch(`/api/contact/${id}/read`, {
+      const res = await apiFetch(`/api/contact/${id}/read`, {
         method: 'PUT',
         headers: { Authorization: `Bearer ${token}` },
       });

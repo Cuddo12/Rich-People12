@@ -3,6 +3,7 @@ import { Save, Smartphone, Truck, ShieldCheck, RefreshCw } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { SiteSettings } from '../../types/ecommerce';
+import { apiFetch } from '../../services/api';
 
 export const AdminSettings: React.FC = () => {
   const { token } = useAdminAuth();
@@ -31,7 +32,7 @@ export const AdminSettings: React.FC = () => {
   const fetchSettings = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/settings');
+      const res = await apiFetch('/api/settings');
       if (res.ok) {
         const data: SiteSettings = await res.json();
         setSettings(data);
@@ -85,7 +86,7 @@ export const AdminSettings: React.FC = () => {
         paymentInstructions,
       };
 
-      const res = await fetch('/api/settings', {
+      const res = await apiFetch('/api/settings', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

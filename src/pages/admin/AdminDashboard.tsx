@@ -17,6 +17,7 @@ import { useToast } from '../../context/ToastContext';
 import { Order, Product } from '../../types/ecommerce';
 import { PrintableInvoice } from '../../components/invoice/PrintableInvoice';
 import { AdminTab } from './AdminLayout';
+import { apiFetch } from '../../services/api';
 
 interface AdminDashboardProps {
   onSelectTab: (tab: AdminTab) => void;
@@ -33,7 +34,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onSelectTab }) =
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/dashboard', {
+      const res = await apiFetch('/api/admin/dashboard', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {

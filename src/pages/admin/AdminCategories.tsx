@@ -4,6 +4,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { CategoryItem, CollectionItem } from '../../types/ecommerce';
 import { resolveAsset } from '../../utils/resolveAsset';
+import { apiFetch } from '../../services/api';
 
 export const AdminCategories: React.FC = () => {
   const { token } = useAdminAuth();
@@ -32,8 +33,8 @@ export const AdminCategories: React.FC = () => {
     setLoading(true);
     try {
       const [catRes, colRes] = await Promise.all([
-        fetch('/api/categories'),
-        fetch('/api/collections'),
+        apiFetch('/api/categories'),
+        apiFetch('/api/collections'),
       ]);
       if (catRes.ok) setCategories(await catRes.json());
       if (colRes.ok) setCollections(await colRes.json());
@@ -52,7 +53,7 @@ export const AdminCategories: React.FC = () => {
     e.preventDefault();
     if (!catName.trim()) return;
     try {
-      const res = await fetch('/api/categories', {
+      const res = await apiFetch('/api/categories', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ export const AdminCategories: React.FC = () => {
   const handleDeleteCategory = async (id: string) => {
     if (!window.confirm('Delete this category?')) return;
     try {
-      const res = await fetch(`/api/categories/${id}`, {
+      const res = await apiFetch(`/api/categories/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -99,7 +100,7 @@ export const AdminCategories: React.FC = () => {
     e.preventDefault();
     if (!colName.trim()) return;
     try {
-      const res = await fetch('/api/collections', {
+      const res = await apiFetch('/api/collections', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -128,7 +129,7 @@ export const AdminCategories: React.FC = () => {
   const handleDeleteCollection = async (id: string) => {
     if (!window.confirm('Delete this collection?')) return;
     try {
-      const res = await fetch(`/api/collections/${id}`, {
+      const res = await apiFetch(`/api/collections/${id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

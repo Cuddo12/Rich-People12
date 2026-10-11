@@ -4,6 +4,7 @@ import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Product, InventoryLog } from '../../types/ecommerce';
 import { resolveAsset } from '../../utils/resolveAsset';
+import { apiFetch } from '../../services/api';
 
 export const AdminInventory: React.FC = () => {
   const { token } = useAdminAuth();
@@ -22,8 +23,8 @@ export const AdminInventory: React.FC = () => {
     setLoading(true);
     try {
       const [prodRes, logsRes] = await Promise.all([
-        fetch('/api/products?limit=100'),
-        fetch('/api/inventory/logs', {
+        apiFetch('/api/products?limit=100'),
+        apiFetch('/api/inventory/logs', {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -53,7 +54,7 @@ export const AdminInventory: React.FC = () => {
 
     const newStock = Math.max(0, selectedProduct.stockQuantity + adjustAmount);
     try {
-      const res = await fetch(`/api/products/${selectedProduct.id}`, {
+      const res = await apiFetch(`/api/products/${selectedProduct.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

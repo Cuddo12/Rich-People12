@@ -3,6 +3,7 @@ import { Star, Check, X, Trash2, RefreshCw } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Review } from '../../types/ecommerce';
+import { apiFetch } from '../../services/api';
 
 export const AdminReviews: React.FC = () => {
   const { token } = useAdminAuth();
@@ -14,7 +15,7 @@ export const AdminReviews: React.FC = () => {
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/reviews');
+      const res = await apiFetch('/api/reviews');
       if (res.ok) {
         setReviews(await res.json());
       }
@@ -31,7 +32,7 @@ export const AdminReviews: React.FC = () => {
 
   const handleUpdateStatus = async (id: string, status: 'approved' | 'rejected') => {
     try {
-      const res = await fetch(`/api/reviews/${id}/status`, {
+      const res = await apiFetch(`/api/reviews/${id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

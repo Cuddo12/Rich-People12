@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AdminUser } from '../types/ecommerce';
+import { apiFetch } from '../services/api';
 
 interface AdminAuthContextType {
   admin: AdminUser | null;
@@ -35,7 +36,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         return;
       }
       try {
-        const res = await fetch('/api/auth/admin/me', {
+        const res = await apiFetch('/api/auth/admin/me', {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.ok) {
@@ -63,7 +64,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
   const login = async (username: string, password: string) => {
     try {
-      const res = await fetch('/api/auth/admin/login', {
+      const res = await apiFetch('/api/auth/admin/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
@@ -94,7 +95,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const changePassword = async (currentPassword: string, newPassword: string) => {
     if (!token) return { success: false, error: 'Not authenticated' };
     try {
-      const res = await fetch('/api/auth/admin/change-password', {
+      const res = await apiFetch('/api/auth/admin/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -115,7 +116,7 @@ export const AdminAuthProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const updateProfile = async (data: { username?: string; email?: string }) => {
     if (!token) return { success: false, error: 'Not authenticated' };
     try {
-      const res = await fetch('/api/auth/admin/profile', {
+      const res = await apiFetch('/api/auth/admin/profile', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

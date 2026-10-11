@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle2 } from 'lucide-react';
 import { useToast } from '../context/ToastContext';
+import { apiFetch } from '../services/api';
 
 export const ContactPage: React.FC = () => {
   const [name, setName] = useState('');
@@ -22,7 +23,7 @@ export const ContactPage: React.FC = () => {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/contact', {
+      const res = await apiFetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, phone, subject, message }),

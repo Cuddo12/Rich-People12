@@ -3,6 +3,7 @@ import { Filter, X, SlidersHorizontal, ArrowUpDown, Search, RotateCcw } from 'lu
 import { Product, ProductSize, CategoryItem } from '../types/ecommerce';
 import { ProductCard } from '../components/product/ProductCard';
 import { QuickViewModal } from '../components/product/QuickViewModal';
+import { apiFetch } from '../services/api';
 
 interface ShopPageProps {
   navigate: (route: string, params?: any) => void;
@@ -42,7 +43,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
 
   // Load categories
   useEffect(() => {
-    fetch('/api/categories')
+    apiFetch('/api/categories')
       .then((res) => res.json())
       .then((data) => setCategories(data))
       .catch((err) => console.error(err));
@@ -79,7 +80,7 @@ export const ShopPage: React.FC<ShopPageProps> = ({
           queryParams.set('sort', sortBy);
         }
 
-        const res = await fetch(`/api/products?${queryParams.toString()}`);
+        const res = await apiFetch(`/api/products?${queryParams.toString()}`);
         if (res.ok) {
           const data = await res.json();
           setProducts(data.products || []);

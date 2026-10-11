@@ -6,6 +6,7 @@ import { QuickViewModal } from '../components/product/QuickViewModal';
 import { RichPeopleClubModal } from '../components/vip/RichPeopleClubModal';
 import { useToast } from '../context/ToastContext';
 import { resolveAsset } from '../utils/resolveAsset';
+import { apiFetch } from '../services/api';
 
 interface HomePageProps {
   navigate: (route: string, params?: any) => void;
@@ -25,8 +26,8 @@ export const HomePage: React.FC<HomePageProps> = ({ navigate }) => {
     const fetchData = async () => {
       try {
         const [prodRes, catRes] = await Promise.all([
-          fetch('/api/products?limit=12'),
-          fetch('/api/categories'),
+          apiFetch('/api/products?limit=12'),
+          apiFetch('/api/categories'),
         ]);
 
         if (prodRes.ok) {

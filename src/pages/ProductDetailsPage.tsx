@@ -21,6 +21,7 @@ import { useWishlist } from '../context/WishlistContext';
 import { useToast } from '../context/ToastContext';
 import { ProductCard } from '../components/product/ProductCard';
 import { resolveAsset } from '../utils/resolveAsset';
+import { apiFetch } from '../services/api';
 
 interface ProductDetailsPageProps {
   slugOrId: string;
@@ -61,7 +62,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`/api/products/${slugOrId}`);
+        const res = await apiFetch(`/api/products/${slugOrId}`);
         if (res.ok) {
           const data = await res.json();
           setProduct(data.product);
@@ -71,7 +72,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
           if (data.product.colors?.length) setSelectedColor(data.product.colors[0]);
 
           // Fetch reviews
-          const revRes = await fetch(`/api/reviews?productId=${data.product.id}`);
+          const revRes = await apiFetch(`/api/reviews?productId=${data.product.id}`);
           if (revRes.ok) {
             const revData = await revRes.json();
             setReviews(revData);
@@ -135,7 +136,7 @@ export const ProductDetailsPage: React.FC<ProductDetailsPageProps> = ({
     }
     setSubmittingReview(true);
     try {
-      const res = await fetch('/api/reviews', {
+      const res = await apiFetch('/api/reviews', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

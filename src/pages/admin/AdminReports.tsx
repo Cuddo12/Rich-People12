@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Download, BarChart2, DollarSign, Package, TrendingUp, RefreshCw } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
+import { apiFetch } from '../../services/api';
 
 export const AdminReports: React.FC = () => {
   const { token } = useAdminAuth();
@@ -13,7 +14,7 @@ export const AdminReports: React.FC = () => {
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/dashboard', {
+      const res = await apiFetch('/api/admin/dashboard', {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) setStats(await res.json());
@@ -30,7 +31,7 @@ export const AdminReports: React.FC = () => {
 
   const handleDownloadCSV = () => {
     if (!token) return;
-    fetch('/api/admin/reports/csv', {
+    apiFetch('/api/admin/reports/csv', {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.blob())

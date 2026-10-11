@@ -20,6 +20,7 @@ import { useToast } from '../../context/ToastContext';
 import { Order, OrderStatus, PaymentStatus } from '../../types/ecommerce';
 import { PrintableInvoice } from '../../components/invoice/PrintableInvoice';
 import { resolveAsset } from '../../utils/resolveAsset';
+import { apiFetch } from '../../services/api';
 
 export const AdminOrders: React.FC = () => {
   const { token } = useAdminAuth();
@@ -45,7 +46,7 @@ export const AdminOrders: React.FC = () => {
       if (statusFilter !== 'ALL') q.set('status', statusFilter);
       if (paymentFilter !== 'ALL') q.set('paymentStatus', paymentFilter);
 
-      const res = await fetch(`/api/orders?${q.toString()}`, {
+      const res = await apiFetch(`/api/orders?${q.toString()}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -71,7 +72,7 @@ export const AdminOrders: React.FC = () => {
   const handlePaymentAction = async (action: 'APPROVE' | 'REJECT' | 'REQUEST_NEW_TRX', note?: string) => {
     if (!selectedOrder || !token) return;
     try {
-      const res = await fetch(`/api/orders/${selectedOrder.id}/payment`, {
+      const res = await apiFetch(`/api/orders/${selectedOrder.id}/payment`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -95,7 +96,7 @@ export const AdminOrders: React.FC = () => {
   const handleUpdateStatus = async (newStatus: OrderStatus, note?: string) => {
     if (!selectedOrder || !token) return;
     try {
-      const res = await fetch(`/api/orders/${selectedOrder.id}/status`, {
+      const res = await apiFetch(`/api/orders/${selectedOrder.id}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -120,7 +121,7 @@ export const AdminOrders: React.FC = () => {
     e.preventDefault();
     if (!selectedOrder || !token || !newNote.trim()) return;
     try {
-      const res = await fetch(`/api/orders/${selectedOrder.id}/note`, {
+      const res = await apiFetch(`/api/orders/${selectedOrder.id}/note`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

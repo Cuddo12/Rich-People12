@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CartItem, Product, ProductSize, Coupon } from '../types/ecommerce';
+import { apiFetch } from '../services/api';
 
 interface CartContextType {
   items: CartItem[];
@@ -163,7 +164,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const applyCouponCode = async (code: string) => {
     try {
-      const res = await fetch('/api/coupons/validate', {
+      const res = await apiFetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ code, subtotal }),

@@ -3,6 +3,7 @@ import { Percent, Tag, Plus, Trash2, X, RefreshCw } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useToast } from '../../context/ToastContext';
 import { Coupon, Offer } from '../../types/ecommerce';
+import { apiFetch } from '../../services/api';
 
 export const AdminCouponsOffers: React.FC = () => {
   const { token } = useAdminAuth();
@@ -25,8 +26,8 @@ export const AdminCouponsOffers: React.FC = () => {
     setLoading(true);
     try {
       const [cRes, oRes] = await Promise.all([
-        fetch('/api/coupons', { headers: { Authorization: `Bearer ${token}` } }),
-        fetch('/api/offers'),
+        apiFetch('/api/coupons', { headers: { Authorization: `Bearer ${token}` } }),
+        apiFetch('/api/offers'),
       ]);
       if (cRes.ok) setCoupons(await cRes.json());
       if (oRes.ok) setOffers(await oRes.json());
@@ -45,7 +46,7 @@ export const AdminCouponsOffers: React.FC = () => {
     e.preventDefault();
     if (!code.trim()) return;
     try {
-      const res = await fetch('/api/coupons', {
+      const res = await apiFetch('/api/coupons', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

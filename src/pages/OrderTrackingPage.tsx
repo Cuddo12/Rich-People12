@@ -16,6 +16,7 @@ import {
 import { Order, OrderStatus } from '../types/ecommerce';
 import { PrintableInvoice } from '../components/invoice/PrintableInvoice';
 import { useToast } from '../context/ToastContext';
+import { apiFetch } from '../services/api';
 
 interface OrderTrackingPageProps {
   initialOrderId?: string;
@@ -50,7 +51,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({
 
     setLoading(true);
     try {
-      const res = await fetch('/api/orders/track', {
+      const res = await apiFetch('/api/orders/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ orderId: orderId.trim(), phone: phone.trim() }),
@@ -87,7 +88,7 @@ export const OrderTrackingPage: React.FC<OrderTrackingPageProps> = ({
 
     setUpdatingTrx(true);
     try {
-      const res = await fetch(`/api/orders/${order.id}/update-trx`, {
+      const res = await apiFetch(`/api/orders/${order.id}/update-trx`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
