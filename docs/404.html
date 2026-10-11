@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Rich People | Luxury Menswear</title>
+    <script type="text/javascript">
+      // Robust Single Page Application redirect for GitHub Pages
+      // Encodes path and query parameters into hash-based route for index.html
+      (function() {
+        var l = window.location;
+        var isGithubIo = l.hostname.indexOf('github.io') > -1;
+        var pathname = l.pathname;
+        var segments = pathname.split('/').filter(Boolean);
+        
+        // If on username.github.io/repo-name/, keep repo-name as prefix
+        var repoPrefix = (isGithubIo && segments.length > 0) ? ('/' + segments[0]) : '';
+        var subpath = (isGithubIo && segments.length > 1) 
+          ? segments.slice(1).join('/') 
+          : (!isGithubIo && segments.length > 0)
+          ? segments.join('/')
+          : '';
+
+        var target = l.protocol + '//' + l.host + repoPrefix + '/#/' + subpath + (l.search ? l.search : '');
+        l.replace(target);
+      })();
+    </script>
+  </head>
+  <body style="background:#09090b;color:#f4f4f5;font-family:sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+    <p style="font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#e11d48;font-weight:600;">
+      Redirecting to Rich People Storefront...
+    </p>
+  </body>
+</html>

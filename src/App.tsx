@@ -37,11 +37,23 @@ import { AdminProfile } from './pages/admin/AdminProfile';
 import { apiFetch } from './services/api';
 
 function AppContent() {
+  const normalizeRoute = (raw: string): string => {
+    if (!raw) return '/';
+    let r = raw.trim();
+    if (r.startsWith('#')) r = r.substring(1);
+    const [pathPart] = r.split('?');
+    if (!pathPart) return '/';
+    let formatted = pathPart.startsWith('/') ? pathPart : '/' + pathPart;
+    if (formatted.length > 1 && formatted.endsWith('/')) {
+      formatted = formatted.slice(0, -1);
+    }
+    return formatted || '/';
+  };
+
   // Read initial route from hash if present (e.g. #/shop or #/admin)
   const getInitialRoute = () => {
     if (typeof window !== 'undefined' && window.location.hash) {
-      const cleanHash = window.location.hash.replace(/^#/, '');
-      if (cleanHash.startsWith('/')) return cleanHash;
+      return normalizeRoute(window.location.hash);
     }
     return '/';
   };
@@ -56,10 +68,8 @@ function AppContent() {
   // Sync route on hashchange (supports browser Back/Forward & direct links)
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace(/^#/, '');
-      if (hash && hash.startsWith('/')) {
-        setCurrentRoute(hash);
-      }
+      const clean = normalizeRoute(window.location.hash);
+      setCurrentRoute(clean);
     };
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
@@ -207,6 +217,30 @@ function AppContent() {
         {currentRoute === '/terms' && (
           <PolicyPages type="terms" navigate={navigate} />
         )}
+
+        {/* Fallback to HomePage if unrecognized route */}
+        {![
+          '/',
+          '/shop',
+          '/shirts',
+          '/panjabi',
+          '/collections',
+          '/cart',
+          '/checkout',
+          '/track',
+          '/about',
+          '/contact',
+          '/wishlist',
+          '/shipping-policy',
+          '/returns',
+          '/faq',
+          '/privacy-policy',
+          '/terms',
+        ].includes(currentRoute) &&
+          !currentRoute.startsWith('/product/') &&
+          !currentRoute.startsWith('/order-success/') && (
+            <HomePage navigate={navigate} />
+          )}
       </main>
 
       <Footer
